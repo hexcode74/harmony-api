@@ -12,6 +12,25 @@ With MQTT, you can easily monitor the state of your devices as well as set
 the current activity of your hub or send specific commands per device. This
 makes it super easy to integrate into your existing home automation setup.
 
+I would like to use IFTTT's Webhooks applet, 
+But, The original source of https://github.com/maddox/harmony-api does not support authentication.
+So I added authentication.
+
+In IFTTT Webhooks "that trigger", you can authenticate  as follows : 
+
+* URL : http://your-harmony-api-server:8282/hubs/method… 
+* Method : POST 
+* Content Type : applications/json
+* Body : {"token":"YOUR_CONNECTION_PASSWORD"}
+
+Using the original source of https://github.com/maddox/harmony-api 
+
+Note that the source for authentication is
+I referenced it at https://github.com/OmerTu/GoogleHomeKodi. 
+ 
+exceptions.js :  ResponseException 
+server.js: handleError, authenticate 
+
 
 ## Features
 
