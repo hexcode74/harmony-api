@@ -587,7 +587,7 @@ app.post('/hubs/:hubSlug/devices/:deviceSlug/commands/:commandSlug', function(re
   }
 })
 
-app.get('/hubs_for_index', function(req, res){
+app.all('/hubs_for_index', function(req, res){
   hubSlugs = Object.keys(harmonyHubClients)
   output = ""
 
