@@ -24,6 +24,7 @@ activity is.
 * List devices.
 * List device commands.
 * Execute discrete commands for each device.
+* json token authentication for ifttt 
 
 ## Setup
 
@@ -36,6 +37,10 @@ broker's host to connect to it.
 
 ```json
 {
+  "enableHTTPserver": true,
+  "HTTPPort" : 8282,
+  "enableAuth": true,
+  authToken": "your_token_string",
   "mqtt_host": "mqtt://192.168.1.106",
   "mqtt_options": {
       "port": 1883,

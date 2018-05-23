@@ -34,9 +34,56 @@ var TOPIC_NAMESPACE = config.topic_namespace || "harmony-api";
 var enableHTTPserver = config.hasOwnProperty("enableHTTPserver") ?
     config.enableHTTPserver : true;
 
+var ResponseException = require('./exceptions.js').ResponseException;
+
+var authenticate = function(req, res, next) {
+
+    let requestToken = req.body.token;
+
+    if (!requestToken) {
+        console.log('401 - Missing request body');
+        throw new ResponseException('401 - Missing access token', 401);
+    }
+
+    if (requestToken !== config.authToken) {
+        console.log(`wrong secret token = ${requestToken}`);
+        throw new ResponseException('403 - Forbidden', 403);
+    }
+
+    console.log('Authentication succeeded');
+    next();
+};
+
+var handleError = (error, req, res, next) => {
+
+    console.log('request failed');
+    console.log('route: ', req.route ? req.route.path : '');
+    console.log('query: ', req.query);
+    console.log('error: ', error);
+    console.log('body: ', req.body);
+
+    let publicError = error;
+
+    if (error instanceof Error) {
+        // native js-errors are not stringifyable
+        publicError = error.message;
+    }
+
+    res
+        .status(error.status || 500)
+        .send(JSON.stringify(publicError, null, 2));
+};
+
+var allRoutesExceptRoot = /\/.+/;
+
 var app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')));
+
+if (config.enableAuth) {
+    app.use(allRoutesExceptRoot, authenticate);
+}
 
 var logFormat = "'[:date[iso]] - :remote-addr - :method :url :status :response-time ms - :res[content-length]b'"
 app.use(morgan(logFormat))
@@ -399,11 +446,11 @@ app.get('/', function(req, res){
   res.sendfile('index.html');
 })
 
-app.get('/hubs', function(req, res){
+app.all('/hubs', function(req, res){
   res.json({hubs: Object.keys(harmonyHubClients)})
 })
 
-app.get('/hubs/:hubSlug/activities', function(req, res){
+app.all('/hubs/:hubSlug/activities', function(req, res){
   hubSlug = req.params.hubSlug
   harmonyHubClient = harmonyHubClients[hubSlug]
 
@@ -414,7 +461,7 @@ app.get('/hubs/:hubSlug/activities', function(req, res){
   }
 })
 
-app.get('/hubs/:hubSlug/activities/:activitySlug/commands', function(req, res){
+app.all('/hubs/:hubSlug/activities/:activitySlug/commands', function(req, res){
   hubSlug = req.params.hubSlug
   activitySlug = req.params.activitySlug
   commands = activityCommandsBySlugs(req.params.hubSlug, req.params.activitySlug);
@@ -426,7 +473,7 @@ app.get('/hubs/:hubSlug/activities/:activitySlug/commands', function(req, res){
   }
 })
 
-app.get('/hubs/:hubSlug/devices', function(req, res){
+app.all('/hubs/:hubSlug/devices', function(req, res){
   hubSlug = req.params.hubSlug
   harmonyHubClient = harmonyHubClients[hubSlug]
 
@@ -437,7 +484,7 @@ app.get('/hubs/:hubSlug/devices', function(req, res){
   }
 })
 
-app.get('/hubs/:hubSlug/devices/:deviceSlug/commands', function(req, res){
+app.all('/hubs/:hubSlug/devices/:deviceSlug/commands', function(req, res){
   hubSlug = req.params.hubSlug
   deviceSlug = req.params.deviceSlug
   device = deviceBySlugs(hubSlug, deviceSlug)
@@ -452,7 +499,7 @@ app.get('/hubs/:hubSlug/devices/:deviceSlug/commands', function(req, res){
   }
 })
 
-app.get('/hubs/:hubSlug/status', function(req, res){
+app.all('/hubs/:hubSlug/status', function(req, res){
   hubSlug = req.params.hubSlug
   harmonyHubClient = harmonyHubClients[hubSlug]
 
@@ -463,7 +510,7 @@ app.get('/hubs/:hubSlug/status', function(req, res){
   }
 })
 
-app.get('/hubs/:hubSlug/commands', function(req, res){
+app.all('/hubs/:hubSlug/commands', function(req, res){
   hubSlug = req.params.hubSlug
   activitySlug = harmonyHubStates[hubSlug].current_activity.slug
 
@@ -563,6 +610,8 @@ app.get('/hubs_for_index', function(req, res){
   res.send(output)
 })
 
+app.use(handleError);
+
 if (enableHTTPserver) {
-    app.listen(process.env.PORT || 8282)
+    app.listen(process.env.PORT || config.HTTPPort )
 }

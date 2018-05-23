@@ -1,5 +1,8 @@
 {
   "enableHTTPserver": true,
+  "HTTPPort" : 8282,
+  "enableAuth": true, 
+  "authToken": "your_token_string",
   "mqtt_host": "mqtt://127.0.0.1",
   "topic_namespace": "harmony-api",
   "mqtt_options": {
