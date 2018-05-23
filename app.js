@@ -620,12 +620,12 @@ app.all('/hubs_for_index_text', function(req, res){
     output += '/hubs/' + hubSlug + '/commands\n'
     cachedHarmonyActivities(hubSlug).forEach(function(activity) {
       path = '/hubs/' + hubSlug + '/activities/' + activity.slug + '/commands\n'
-      output += path + path 
+      output += path
     })
     output += '/hubs/' + hubSlug + '/devices/hubs/' + hubSlug + '/devices\n'
     cachedHarmonyDevices(hubSlug).forEach(function(device) {
       path = '/hubs/' + hubSlug + '/devices/' + device.slug + '/commands\n'
-      output += path + path
+      output += path
     })
   });
 
