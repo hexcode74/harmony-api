@@ -24,18 +24,18 @@ In IFTTT Webhooks "that trigger", you can authenticate  as follows :
 * Body : {"token":"YOUR_CONNECTION_PASSWORD"}
 
 
-If you have Raspberry pi and use Raspberry os raspian How to install Raspberry Pi in my blog. 
+If you have Raspberry pi and use Raspbian OS, How to install Raspberry Pi in my blog.
 I have also explained some test methods and examples for IFTTT (if+this then that examples)
-See the link below
+
+See the link below:
 http://comhack.blogspot.com/2018/05/raspberry-pi-install-harmony-api-with.html
 
-Using the original source of https://github.com/maddox/harmony-api 
 
+Using the original source of https://github.com/maddox/harmony-api 
 Note that the source for authentication is I referenced it at https://github.com/OmerTu/GoogleHomeKodi. 
  
 * exceptions.js :  ResponseException 
 * server.js: handleError, authenticate 
-
 
 ## Features
 
@@ -111,9 +111,8 @@ mode with logging to standard out.
 
 ### install for Raspberry Pi
 
-If you have Raspberry pie and use Raspberry os raspian 
+If you have Raspberry pi and use Raspbian OS, 
 How to install Raspberry Pi in my blog. See the link below
-
 http://comhack.blogspot.com/2018/05/raspberry-pi-install-harmony-api-with.html
 
 ## Logging
