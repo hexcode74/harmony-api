@@ -25,11 +25,10 @@ In IFTTT Webhooks "that trigger", you can authenticate  as follows :
 
 Using the original source of https://github.com/maddox/harmony-api 
 
-Note that the source for authentication is
-I referenced it at https://github.com/OmerTu/GoogleHomeKodi. 
+Note that the source for authentication is I referenced it at https://github.com/OmerTu/GoogleHomeKodi. 
  
-exceptions.js :  ResponseException 
-server.js: handleError, authenticate 
+* exceptions.js :  ResponseException 
+* server.js: handleError, authenticate 
 
 
 ## Features
