@@ -42,7 +42,7 @@ activity is.
 * List devices.
 * List device commands.
 * Execute discrete commands for each device.
-* json token authentication for ifttt 
+* Json token authentication for IFTTT's Webhooks applet 
 
 ## Setup
 
