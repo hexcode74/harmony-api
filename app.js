@@ -610,6 +610,29 @@ app.all('/hubs_for_index', function(req, res){
   res.send(output)
 })
 
+app.all('/hubs_for_index_text', function(req, res){
+  hubSlugs = Object.keys(harmonyHubClients)
+  output = ""
+
+  Object.keys(harmonyHubClients).forEach(function(hubSlug) {
+    output += '/hubs/' + hubSlug + '/status\n'
+    output += '/hubs/' + hubSlug + '/activities\n'
+    output += '/hubs/' + hubSlug + '/commands\n'
+    cachedHarmonyActivities(hubSlug).forEach(function(activity) {
+      path = '/hubs/' + hubSlug + '/activities/' + activity.slug + '/commands\n'
+      output += path + path 
+    })
+    output += '/hubs/' + hubSlug + '/devices/hubs/' + hubSlug + '/devices\n'
+    cachedHarmonyDevices(hubSlug).forEach(function(device) {
+      path = '/hubs/' + hubSlug + '/devices/' + device.slug + '/commands\n'
+      output += path + path
+    })
+  });
+
+  res.send(output)
+})
+
+
 app.use(handleError);
 
 if (enableHTTPserver) {
