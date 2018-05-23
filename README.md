@@ -40,7 +40,7 @@ broker's host to connect to it.
   "enableHTTPserver": true,
   "HTTPPort" : 8282,
   "enableAuth": true,
-  authToken": "your_token_string",
+  "authToken": "your_token_string",
   "mqtt_host": "mqtt://192.168.1.106",
   "mqtt_options": {
       "port": 1883,
