@@ -576,15 +576,34 @@ app.post('/hubs/:hubSlug/activities/:activitySlug', function(req, res){
 })
 
 app.post('/hubs/:hubSlug/devices/:deviceSlug/commands/:commandSlug', function(req, res){
-  command = commandBySlugs(req.params.hubSlug, req.params.deviceSlug, req.params.commandSlug)
+  var reg = /^[0-9]+$/
+  var numberCommand = req.params.commandSlug
+  if (reg.test(numberCommand)) {
+      var flag = 0
+      for ( var i = 0; i < numberCommand.length; i++ ) {
+            command = commandBySlugs(req.params.hubSlug, req.params.deviceSlug, numberCommand[i])
+            if (command) {
+             sendAction(req.params.hubSlug, command.action, req.query.repeat)
+             flag++
+          }
+          }
+      if (flag == numberCommand.length) {
+             res.json({message: "ok"})
+          } else {
+         res.status(404).json({message: "Not Found or Some Error"})
+      }
 
-  if (command) {
-    sendAction(req.params.hubSlug, command.action, req.query.repeat)
+    } else {
+         command = commandBySlugs(req.params.hubSlug, req.params.deviceSlug, req.params.commandSlug)
 
-    res.json({message: "ok"})
-  }else{
-    res.status(404).json({message: "Not Found"})
-  }
+        if (command) {
+       sendAction(req.params.hubSlug, command.action, req.query.repeat)
+
+       res.json({message: "ok"})
+    }else{
+           res.status(404).json({message: "Not Found"})
+         }
+      }
 })
 
 app.all('/hubs_for_index', function(req, res){
